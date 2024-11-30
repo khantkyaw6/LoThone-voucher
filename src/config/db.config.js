@@ -1,11 +1,22 @@
-// if (process.env.NODE_ENV === "development") {
-require("dotenv").config();
-// }
+const mongoose = require("mongoose");
 
-module.exports = {
-	host: process.env.DB_HOST,
-	port: process.env.DB_PORT,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASSWORD,
-	database: process.env.DB_NAME
+const url = process.env.MONGODB_URL;
+
+const connectDB = async () => {
+	try {
+		await mongoose.connect(url, {
+			useNewUrlParser: true,
+			useUnifiedTopology: true, // Important to avoid connection issues
+			serverSelectionTimeoutMS: 5000, // Adjust timeout for better error handling
+		});
+
+		console.log("Connected to MongoDB Atlas with Mongoose!");
+	} catch (error) {
+		console.error(
+			"Error connecting to MongoDB Atlas with Mongoose:",
+			error
+		);
+	}
 };
+
+module.exports = connectDB;
